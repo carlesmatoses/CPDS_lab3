@@ -1,0 +1,28 @@
+
+// The Gurb airport has several runways that are identified by a number in
+// the range R. When a flight wants to take off, first it has to ask for a runway to the air
+// traffic control tower, then it waits until the control tower allocates a runway. Afterwards,
+// the flight takes off. The following FSP sketch models the Gurb airport
+
+const False = 0
+const True = 1
+
+const RMAX = 2 // Number of terminals (runways)
+const FMAX = 2 // Number of flights
+
+range Bool = False..True
+range R = 1..RMAX
+range F = 1..FMAX
+
+// Flight Process
+FLIGHT = (request.runway -> WAIT),
+WAIT = (free.runway[i:R] -> take.off.done[i] -> FLIGHT).
+
+// Control Process
+CONTROL = CONTROL[True][True], // Both terminals are free initially
+CONTROL[free1:Bool][free2:Bool] = (
+     when(free1) request.runway -> f[k:F].free.runway[1] ->  CONTROL[free1][free2]
+    |when (free2) request.runway -> f[k:F].free.runway[2] -> CONTROL[free1][free2]).
+
+// Composed System
+||AIRPORT = (f[F]:FLIGHT || CONTROL).
