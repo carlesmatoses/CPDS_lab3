@@ -1,4 +1,3 @@
-
 // The Gurb airport has several runways that are identified by a number in
 // the range R. When a flight wants to take off, first it has to ask for a runway to the air
 // traffic control tower, then it waits until the control tower allocates a runway. Afterwards,
@@ -21,8 +20,11 @@ WAIT = (free.runway[i:R] -> take.off.done[i] -> FLIGHT).
 // Control Process
 CONTROL = CONTROL[True][True], // Both terminals are free initially
 CONTROL[free1:Bool][free2:Bool] = (
-     when(free1) request.runway -> f[k:F].free.runway[1] ->  CONTROL[free1][free2]
-    |when (free2) request.runway -> f[k:F].free.runway[2] -> CONTROL[free1][free2]).
+     when(free1)  f[k:F].free.runway[1] ->  CONTROL[False][free2]
+    |when (free2)  f[k:F].free.runway[2] -> CONTROL[free1][False]
+    |f[j:F].take.off.done[1] -> CONTROL[True][free2]
+    |f[j:F].take.off.done[2] -> CONTROL[free1][True]	
+).
 
 // Composed System
 ||AIRPORT = (f[F]:FLIGHT || CONTROL).
