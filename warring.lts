@@ -1,0 +1,24 @@
+const False = 0
+const True = 1
+
+const RMAX = 1 // Number of fields (runways)
+const FMAX = 2 // Number of persons
+
+range Bool = False..True
+range R = 1..RMAX
+range F = 1..FMAX
+
+// Flight Process
+NEIGHBOUR = (flag.on -> CHECK),
+CHECK = (enter.field -> WAIT | flag.off -> NEIGHBOUR),
+WAIT = (take.off -> flag.off -> NEIGHBOUR).
+
+// Control Process
+FIELD = FIELD[True], // terminal is free initially
+FIELD[free:Bool] = (
+     when(free)  f[k:F].enter.field ->  FIELD[False]
+    |f[j:F].take.off -> FIELD[True]
+).
+
+// Composed System
+||AIRPORT = (f[F]:NEIGHBOUR || FIELD).
