@@ -9,8 +9,8 @@ public class Neighbor extends Thread {
             try {
                 String name = Thread.currentThread().getName() ;
                 System.out.println("try again, my name is: "+ name);
-                Thread.sleep((int)(200*Math.random()));
                 flags.set_true(name);
+                Thread.sleep((int)(200*Math.random()));
                 if (!flags.query_flag(name)) {
                     System.out.println(name + " enter");
                     Thread.sleep(400);
