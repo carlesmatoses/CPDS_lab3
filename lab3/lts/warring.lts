@@ -1,3 +1,6 @@
+// Carles Matoses Gimenez
+// Ignasi Granell Verdell
+
 // Adverse circumstances: If both neighbours try to raise the flags continuously and both neighbours see the others flag already raised,
 // they will enter a loop where they both try to rise the flag but no one can keep it raised.
  
